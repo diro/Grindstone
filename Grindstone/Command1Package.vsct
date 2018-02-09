@@ -15,10 +15,10 @@
         defining some of the constants that we will use inside the file. -->
 
   <!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
-  <Extern href="stdidcmd.h"/>
+  <Extern href="stdidcmd.h" />
 
   <!--This header contains the command ids for the menus provided by the shell. -->
-  <Extern href="vsshlids.h"/>
+  <Extern href="vsshlids.h" />
 
   <!--The Commands section is where commands, menus, and menu groups are defined.
       This section uses a Guid to identify the package that provides the command defined inside it. -->
@@ -37,7 +37,7 @@
          must be a menu. -->
     <Groups>
       <Group guid="guidCommand1PackageCmdSet" id="MyMenuGroup" priority="0x0600">
-        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
       </Group>
     </Groups>
 
@@ -62,6 +62,13 @@
           <ButtonText>&amp;Generate C++ Class</ButtonText>
         </Strings>
       </Button>
+      <Button guid="guidCommand1PackageCmdSet" id="cmdidCommandGenerateInterface" priority="0x0100" type="Button">
+        <Parent guid="guidCommand1PackageCmdSet" id="MyMenuGroup" />
+        <Icon guid="guidImages1" id="bmpPic1" />
+        <Strings>
+          <ButtonText>Generate &amp;Interface</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
 
     <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
@@ -71,21 +78,40 @@
             bitmap strip containing the bitmaps and then there are the numeric ids of the elements used
             inside a button definition. An important aspect of this declaration is that the element id
             must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
-      <Bitmap guid="guidImages" href="Resources\Command1.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough"/>
+      <Bitmap guid="guidImages" href="Resources\Command1.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+      <Bitmap guid="guidImages1" href="Resources\CommandGenerateInterface.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
     </Bitmaps>
   </Commands>
 
-  <Symbols>
+
+    <Symbols>
     <!-- This is the package guid. -->
     <GuidSymbol name="guidCommand1Package" value="{4e8283c3-c53a-46b0-994d-cbbe6a6a8a0f}" />
-
-    <!-- This is the guid used to group the menu commands together -->
+      
+      <GuidSymbol name="guidTopLevelMenuCmdSet" value="{4469899D-648E-40BF-8B8B-D2EA4A6404DC}">
+    <IDSymbol name="SubMenu" value="0x1100" />
+    <IDSymbol name="SubMenuGroup" value="0x1150" />
+    <IDSymbol name="cmdidTestSubCommand" value="0x0105" />
+      </GuidSymbol>
+      
+      <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidCommand1PackageCmdSet" value="{47174d19-f19f-47cf-90ae-5f8a17553fc4}">
       <IDSymbol name="MyMenuGroup" value="0x1020" />
       <IDSymbol name="Command1Id" value="0x0100" />
+      <IDSymbol value="4129" name="cmdidCommandGenerateInterface" />
     </GuidSymbol>
 
-    <GuidSymbol name="guidImages" value="{d4dcf3b7-2a48-4dbf-adf7-bf3b5f2d078b}" >
+    <GuidSymbol name="guidImages" value="{d4dcf3b7-2a48-4dbf-adf7-bf3b5f2d078b}">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+      
+  
+    <GuidSymbol value="{bcb81f3c-1766-4fc6-805d-3719fb2fed19}" name="guidImages1">
       <IDSymbol name="bmpPic1" value="1" />
       <IDSymbol name="bmpPic2" value="2" />
       <IDSymbol name="bmpPicSearch" value="3" />
@@ -94,4 +120,6 @@
       <IDSymbol name="bmpPicStrikethrough" value="6" />
     </GuidSymbol>
   </Symbols>
+
+
 </CommandTable>

@@ -57,6 +57,7 @@
     <Compile Include="CodeElementHelper.cs" />
     <Compile Include="Command1.cs" />
     <Compile Include="Command1Package.cs" />
+    <Compile Include="CommandGenerateInterface.cs" />
     <Compile Include="FormProjectPicker.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -69,6 +70,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -89,6 +91,7 @@
     <Content Include="index.html" />
     <Content Include="Resources\Command1.png" />
     <Content Include="Resources\Command1Package.ico" />
+    <Content Include="Resources\CommandGenerateInterface.png" />
     <Content Include="stylesheet.css" />
   </ItemGroup>
   <ItemGroup>

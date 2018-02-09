@@ -22,5 +22,17 @@ namespace Grindstone.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool VIVOTEK_PROJECT {
+            get {
+                return ((bool)(this["VIVOTEK_PROJECT"]));
+            }
+            set {
+                this["VIVOTEK_PROJECT"] = value;
+            }
+        }
     }
 }

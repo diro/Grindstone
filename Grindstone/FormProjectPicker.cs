@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Grindstone.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,12 +18,12 @@ namespace Grindstone
 
         private void FormProjectPicker_Load(object sender, EventArgs e)
         {
-
+            this.checkBoxVivotekProject.Checked = Settings.Default.VIVOTEK_PROJECT;
         }
 
         private void checkBoxToSrcFolder_CheckedChanged(object sender, EventArgs e)
         {
-
+            Settings.Default.VIVOTEK_PROJECT = this.checkBoxVivotekProject.Checked;
         }
 
         private void projectList_DoubleClick(object sender, EventArgs e)

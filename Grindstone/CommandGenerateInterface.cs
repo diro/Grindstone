@@ -1,29 +1,23 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Drawing;
 using System.Globalization;
-using System.Windows.Forms;
 using EnvDTE;
 using EnvDTE80;
-using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Grindstone
 {
-   
     /// <summary>
     /// Command handler
     /// </summary>
-    internal sealed class CommandAddClass
+    internal sealed class CommandGenerateInterface
     {
         /// <summary>
         /// Command ID.
         /// </summary>
-        public const int CommandId = 0x0100;
+        public const int CommandId = 4129;
 
         /// <summary>
         /// Command menu group (command set GUID).
@@ -36,11 +30,11 @@ namespace Grindstone
         private readonly Package package;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CommandAddClass"/> class.
+        /// Initializes a new instance of the <see cref="CommandGenerateInterface"/> class.
         /// Adds our command handlers for menu (commands must exist in the command table file)
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
-        private CommandAddClass(Package package)
+        private CommandGenerateInterface(Package package)
         {
             if (package == null)
             {
@@ -61,7 +55,7 @@ namespace Grindstone
         /// <summary>
         /// Gets the instance of the command.
         /// </summary>
-        public static CommandAddClass Instance
+        public static CommandGenerateInterface Instance
         {
             get;
             private set;
@@ -84,7 +78,7 @@ namespace Grindstone
         /// <param name="package">Owner package, not null.</param>
         public static void Initialize(Package package)
         {
-            Instance = new CommandAddClass(package);
+            Instance = new CommandGenerateInterface(package);
         }
 
         /// <summary>
@@ -94,15 +88,12 @@ namespace Grindstone
         /// </summary>
         /// <param name="sender">Event sender.</param>
         /// <param name="e">Event args.</param>
-
-
-       
         private void MenuItemCallback(object sender, EventArgs e)
         {
-            FormProjectPicker form = new FormProjectPicker();
-
             var DTE = (DTE2)this.ServiceProvider.GetService(typeof(DTE));
             var solution = (IVsSolution)this.ServiceProvider.GetService(typeof(IVsSolution));
+
+            FormProjectPicker form = new FormProjectPicker();
 
             List<EnvDTE.Project> projectList = new List<EnvDTE.Project>();
             foreach (IVsHierarchy hier in Utility.GetProjectsInSolution(solution, __VSENUMPROJFLAGS.EPF_LOADEDINSOLUTION))
@@ -124,17 +115,72 @@ namespace Grindstone
             if (selectedProjectName == "")
                 return;
 
-            String className = GetSelectionClassName(DTE);
             EnvDTE.Project targetProject = projectList[form.projectList.SelectedIndex];
-            Utility.AddClassToProject(targetProject, className, form.checkBoxVivotekProject.Checked);
+
+            TextSelection sel =
+           (TextSelection)DTE.ActiveDocument.Selection;
+            CodeClass sourceClass = (CodeClass)sel.ActivePoint.get_CodeElement(vsCMElement.vsCMElementClass);
+            List<string> functionList = new List<string>();
+            string interfaceName = "I" + sourceClass.Name;
+            Utility.AddClassToProject(targetProject, interfaceName, false);
+
+            System.Threading.Timer timer = null;
+            timer = new System.Threading.Timer((obj) =>
+            {
+                AddFunctionToClass(targetProject, sourceClass, interfaceName);
+                timer.Dispose();
+            },
+                        null, 100, System.Threading.Timeout.Infinite);
+            
         }
 
-
-        private static String GetSelectionClassName(DTE2 DTE)
+        private static void AddFunctionToClass(Project targetProject, CodeClass cls, string interfaceName)
         {
-            ProjectItem projectItem = DTE.ActiveDocument.ProjectItem;
-            TextSelection selection = (TextSelection)projectItem.Document.Selection;
-            return selection.Text;            
+            CodeClass targetClass = null;
+
+            int tryCount = 0;
+            do
+            {
+                try
+                {
+                    targetClass = (CodeClass) targetProject.CodeModel.CodeElements.Item(interfaceName);
+                    System.Threading.Thread.Sleep(10);
+                }
+                catch
+                {
+
+                }
+            } while (targetClass == null && tryCount < 1024);
+
+            if (targetClass == null)
+            {
+                return;
+            }
+
+            foreach (CodeElement elem in cls.Members)
+            {
+                if (elem.Kind == vsCMElement.vsCMElementFunction)
+                {
+                    if (elem.Name != cls.Name &&
+                        elem.Name != "~" + cls.Name)
+                    {
+                        CodeFunction originalFunction = (CodeFunction) elem;
+
+                        if (originalFunction.Access == vsCMAccess.vsCMAccessPublic)
+                        {
+                            CodeFunction newFunction = targetClass.AddFunction(elem.Name, vsCMFunction.vsCMFunctionPure | vsCMFunction.vsCMFunctionVirtual, originalFunction.Type, -1);
+                            int paramIdx = 0;
+                            foreach (CodeParameter param in originalFunction.Parameters)
+                            {
+                                string oldParamsName = param.Name;
+                                newFunction.AddParameter(oldParamsName, param.Type, ++paramIdx);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return;
         }
     }
 }

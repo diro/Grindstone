@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.projectList = new System.Windows.Forms.ListBox();
-            this.checkBoxToSrcFolder = new System.Windows.Forms.CheckBox();
+            this.checkBoxVivotekProject = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // projectList
@@ -45,21 +45,21 @@
             // 
             // checkBoxToSrcFolder
             // 
-            this.checkBoxToSrcFolder.AutoSize = true;
-            this.checkBoxToSrcFolder.Checked = true;
-            this.checkBoxToSrcFolder.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxToSrcFolder.Location = new System.Drawing.Point(3, 127);
-            this.checkBoxToSrcFolder.Name = "checkBoxToSrcFolder";
-            this.checkBoxToSrcFolder.Size = new System.Drawing.Size(111, 16);
-            this.checkBoxToSrcFolder.TabIndex = 1;
-            this.checkBoxToSrcFolder.Text = "Add to [src] folder";
-            this.checkBoxToSrcFolder.UseVisualStyleBackColor = true;
-            this.checkBoxToSrcFolder.CheckedChanged += new System.EventHandler(this.checkBoxToSrcFolder_CheckedChanged);
+            this.checkBoxVivotekProject.AutoSize = true;
+            this.checkBoxVivotekProject.Checked = true;
+            this.checkBoxVivotekProject.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxVivotekProject.Location = new System.Drawing.Point(3, 127);
+            this.checkBoxVivotekProject.Name = "checkBoxToSrcFolder";
+            this.checkBoxVivotekProject.Size = new System.Drawing.Size(152, 16);
+            this.checkBoxVivotekProject.TabIndex = 1;
+            this.checkBoxVivotekProject.Text = "VIVOTEK Folder Structure";
+            this.checkBoxVivotekProject.UseVisualStyleBackColor = true;
+            this.checkBoxVivotekProject.CheckedChanged += new System.EventHandler(this.checkBoxToSrcFolder_CheckedChanged);
             // 
             // FormProjectPicker
             // 
             this.ClientSize = new System.Drawing.Size(284, 146);
-            this.Controls.Add(this.checkBoxToSrcFolder);
+            this.Controls.Add(this.checkBoxVivotekProject);
             this.Controls.Add(this.projectList);
             this.Name = "FormProjectPicker";
             this.Load += new System.EventHandler(this.FormProjectPicker_Load);
@@ -71,6 +71,6 @@
         #endregion
 
         public System.Windows.Forms.ListBox projectList;
-        public System.Windows.Forms.CheckBox checkBoxToSrcFolder;
+        public System.Windows.Forms.CheckBox checkBoxVivotekProject;
     }
 }

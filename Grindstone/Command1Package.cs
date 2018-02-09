@@ -62,6 +62,7 @@ namespace Grindstone
         {
             CommandAddClass.Initialize(this);
             base.Initialize();
+            CommandGenerateInterface.Initialize(this);
         }
 
         #endregion
